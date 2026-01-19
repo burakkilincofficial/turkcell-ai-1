@@ -1,0 +1,416 @@
+openapi: 3.0.3
+info:
+  title: Inventory Service API
+  description: Inventory yönetimi için CRUD işlemlerini sağlayan API
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@ecommerce.com
+
+servers:
+  - url: http://localhost:8081
+    description: Local development server
+  - url: https://api.ecommerce.com/inventory
+    description: Production server
+
+tags:
+  - name: Inventory
+    description: Inventory CRUD işlemleri
+
+paths:
+  /api/v1/inventory:
+    get:
+      tags:
+        - Inventory
+      summary: Tüm inventory kayıtlarını listele
+      description: Sistemdeki tüm inventory kayıtlarını getirir
+      operationId: getAllInventory
+      parameters:
+        - name: page
+          in: query
+          description: Sayfa numarası
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Sayfa başına kayıt sayısı
+          required: false
+          schema:
+            type: integer
+            default: 20
+        - name: sort
+          in: query
+          description: Sıralama kriteri (örn. productName,asc)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Başarılı işlem
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InventoryResponse'
+                  totalElements:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  currentPage:
+                    type: integer
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    post:
+      tags:
+        - Inventory
+      summary: Yeni inventory kaydı oluştur
+      description: Yeni bir inventory kaydı ekler
+      operationId: createInventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequest'
+      responses:
+        '201':
+          description: Inventory başarıyla oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryResponse'
+        '400':
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/inventory/{id}:
+    get:
+      tags:
+        - Inventory
+      summary: ID'ye göre inventory kaydını getir
+      description: Belirtilen ID'ye sahip inventory kaydını getirir
+      operationId: getInventoryById
+      parameters:
+        - name: id
+          in: path
+          description: Inventory ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Başarılı işlem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryResponse'
+        '404':
+          description: Inventory bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    put:
+      tags:
+        - Inventory
+      summary: Inventory kaydını güncelle
+      description: Belirtilen ID'ye sahip inventory kaydını günceller
+      operationId: updateInventory
+      parameters:
+        - name: id
+          in: path
+          description: Inventory ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryRequest'
+      responses:
+        '200':
+          description: Inventory başarıyla güncellendi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryResponse'
+        '400':
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Inventory bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    
+    delete:
+      tags:
+        - Inventory
+      summary: Inventory kaydını sil
+      description: Belirtilen ID'ye sahip inventory kaydını siler
+      operationId: deleteInventory
+      parameters:
+        - name: id
+          in: path
+          description: Inventory ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Inventory başarıyla silindi
+        '404':
+          description: Inventory bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/inventory/product/{productId}:
+    get:
+      tags:
+        - Inventory
+      summary: Ürün ID'sine göre inventory bilgisini getir
+      description: Belirtilen ürün ID'sine sahip inventory bilgisini getirir
+      operationId: getInventoryByProductId
+      parameters:
+        - name: productId
+          in: path
+          description: Ürün ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Başarılı işlem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryResponse'
+        '404':
+          description: Inventory bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/inventory/{id}/stock:
+    patch:
+      tags:
+        - Inventory
+      summary: Stok miktarını güncelle
+      description: Belirtilen inventory kaydının stok miktarını günceller
+      operationId: updateStock
+      parameters:
+        - name: id
+          in: path
+          description: Inventory ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - quantity
+              properties:
+                quantity:
+                  type: integer
+                  description: Güncellenecek stok miktarı (pozitif veya negatif)
+                  example: 10
+      responses:
+        '200':
+          description: Stok başarıyla güncellendi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryResponse'
+        '400':
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Inventory bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Sunucu hatası
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    InventoryRequest:
+      type: object
+      required:
+        - productId
+        - productName
+        - quantity
+      properties:
+        productId:
+          type: string
+          description: Ürün ID
+          example: "PROD-001"
+        productName:
+          type: string
+          description: Ürün adı
+          example: "Laptop"
+        quantity:
+          type: integer
+          description: Stok miktarı
+          minimum: 0
+          example: 100
+        minStockLevel:
+          type: integer
+          description: Minimum stok seviyesi
+          minimum: 0
+          example: 10
+        maxStockLevel:
+          type: integer
+          description: Maksimum stok seviyesi
+          minimum: 0
+          example: 500
+        location:
+          type: string
+          description: Depo konumu
+          example: "Warehouse A"
+        description:
+          type: string
+          description: Ürün açıklaması
+          example: "High performance laptop"
+
+    InventoryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Inventory ID
+          example: 1
+        productId:
+          type: string
+          description: Ürün ID
+          example: "PROD-001"
+        productName:
+          type: string
+          description: Ürün adı
+          example: "Laptop"
+        quantity:
+          type: integer
+          description: Stok miktarı
+          example: 100
+        minStockLevel:
+          type: integer
+          description: Minimum stok seviyesi
+          example: 10
+        maxStockLevel:
+          type: integer
+          description: Maksimum stok seviyesi
+          example: 500
+        location:
+          type: string
+          description: Depo konumu
+          example: "Warehouse A"
+        description:
+          type: string
+          description: Ürün açıklaması
+          example: "High performance laptop"
+        createdAt:
+          type: string
+          format: date-time
+          description: Oluşturulma tarihi
+          example: "2026-01-19T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Güncellenme tarihi
+          example: "2026-01-19T15:45:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Hata zamanı
+          example: "2026-01-19T10:30:00Z"
+        status:
+          type: integer
+          description: HTTP durum kodu
+          example: 400
+        error:
+          type: string
+          description: Hata türü
+          example: "Bad Request"
+        message:
+          type: string
+          description: Hata mesajı
+          example: "Geçersiz istek parametreleri"
+        path:
+          type: string
+          description: İstek yolu
+          example: "/api/v1/inventory"
