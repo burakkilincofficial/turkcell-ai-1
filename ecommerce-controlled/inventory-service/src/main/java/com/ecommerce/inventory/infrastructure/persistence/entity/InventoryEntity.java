@@ -1,4 +1,4 @@
-package com.ecommerce.inventory.domain;
+package com.ecommerce.inventory.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Inventory {
+public class InventoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

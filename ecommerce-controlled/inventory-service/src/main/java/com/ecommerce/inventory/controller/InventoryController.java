@@ -1,10 +1,11 @@
 package com.ecommerce.inventory.controller;
 
+import com.ecommerce.inventory.application.usecase.*;
+import com.ecommerce.inventory.domain.model.Inventory;
 import com.ecommerce.inventory.dto.InventoryRequest;
 import com.ecommerce.inventory.dto.InventoryResponse;
 import com.ecommerce.inventory.dto.PageResponse;
 import com.ecommerce.inventory.dto.StockUpdateRequest;
-import com.ecommerce.inventory.service.InventoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,17 +13,28 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST Controller for inventory operations.
+ * Web layer - handles HTTP requests/responses, delegates to application use-cases.
+ */
 @RestController
 @RequestMapping("/api/v1/inventory")
 @RequiredArgsConstructor
 @Tag(name = "Inventory", description = "Inventory CRUD işlemleri")
 public class InventoryController {
 
-    private final InventoryService inventoryService;
+    private final GetAllInventoryUseCase getAllInventoryUseCase;
+    private final GetInventoryByIdUseCase getInventoryByIdUseCase;
+    private final GetInventoryByProductIdUseCase getInventoryByProductIdUseCase;
+    private final CreateInventoryUseCase createInventoryUseCase;
+    private final UpdateInventoryUseCase updateInventoryUseCase;
+    private final DeleteInventoryUseCase deleteInventoryUseCase;
+    private final UpdateStockUseCase updateStockUseCase;
 
     @GetMapping
     @Operation(summary = "Tüm inventory kayıtlarını listele", description = "Sistemdeki tüm inventory kayıtlarını getirir")
@@ -37,7 +49,17 @@ public class InventoryController {
             @RequestParam(defaultValue = "20") int size,
             @Parameter(description = "Sıralama kriteri (örn. productName,asc)") 
             @RequestParam(required = false) String sort) {
-        PageResponse<InventoryResponse> response = inventoryService.getAllInventory(page, size, sort);
+        
+        Page<Inventory> inventoryPage = getAllInventoryUseCase.execute(page, size, sort);
+        
+        PageResponse<InventoryResponse> response = new PageResponse<>();
+        response.setContent(inventoryPage.getContent().stream()
+                .map(this::mapToResponse)
+                .toList());
+        response.setTotalElements((int) inventoryPage.getTotalElements());
+        response.setTotalPages(inventoryPage.getTotalPages());
+        response.setCurrentPage(inventoryPage.getNumber());
+        
         return ResponseEntity.ok(response);
     }
 
@@ -51,8 +73,8 @@ public class InventoryController {
     public ResponseEntity<InventoryResponse> getInventoryById(
             @Parameter(description = "Inventory ID") 
             @PathVariable Long id) {
-        InventoryResponse response = inventoryService.getInventoryById(id);
-        return ResponseEntity.ok(response);
+        Inventory inventory = getInventoryByIdUseCase.execute(id);
+        return ResponseEntity.ok(mapToResponse(inventory));
     }
 
     @GetMapping("/product/{productId}")
@@ -65,8 +87,8 @@ public class InventoryController {
     public ResponseEntity<InventoryResponse> getInventoryByProductId(
             @Parameter(description = "Ürün ID") 
             @PathVariable String productId) {
-        InventoryResponse response = inventoryService.getInventoryByProductId(productId);
-        return ResponseEntity.ok(response);
+        Inventory inventory = getInventoryByProductIdUseCase.execute(productId);
+        return ResponseEntity.ok(mapToResponse(inventory));
     }
 
     @PostMapping
@@ -78,8 +100,18 @@ public class InventoryController {
     })
     public ResponseEntity<InventoryResponse> createInventory(
             @Valid @RequestBody InventoryRequest request) {
-        InventoryResponse response = inventoryService.createInventory(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        
+        Inventory inventory = createInventoryUseCase.execute(
+                request.getProductId(),
+                request.getProductName(),
+                request.getQuantity(),
+                request.getMinStockLevel(),
+                request.getMaxStockLevel(),
+                request.getLocation(),
+                request.getDescription()
+        );
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(inventory));
     }
 
     @PutMapping("/{id}")
@@ -94,8 +126,19 @@ public class InventoryController {
             @Parameter(description = "Inventory ID") 
             @PathVariable Long id,
             @Valid @RequestBody InventoryRequest request) {
-        InventoryResponse response = inventoryService.updateInventory(id, request);
-        return ResponseEntity.ok(response);
+        
+        Inventory inventory = updateInventoryUseCase.execute(
+                id,
+                request.getProductId(),
+                request.getProductName(),
+                request.getQuantity(),
+                request.getMinStockLevel(),
+                request.getMaxStockLevel(),
+                request.getLocation(),
+                request.getDescription()
+        );
+        
+        return ResponseEntity.ok(mapToResponse(inventory));
     }
 
     @DeleteMapping("/{id}")
@@ -108,7 +151,7 @@ public class InventoryController {
     public ResponseEntity<Void> deleteInventory(
             @Parameter(description = "Inventory ID") 
             @PathVariable Long id) {
-        inventoryService.deleteInventory(id);
+        deleteInventoryUseCase.execute(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -124,7 +167,23 @@ public class InventoryController {
             @Parameter(description = "Inventory ID") 
             @PathVariable Long id,
             @Valid @RequestBody StockUpdateRequest request) {
-        InventoryResponse response = inventoryService.updateStock(id, request.getQuantity());
-        return ResponseEntity.ok(response);
+        Inventory inventory = updateStockUseCase.execute(id, request.getQuantity());
+        return ResponseEntity.ok(mapToResponse(inventory));
+    }
+
+    // Mapping helper method
+    private InventoryResponse mapToResponse(Inventory inventory) {
+        InventoryResponse response = new InventoryResponse();
+        response.setId(inventory.getId());
+        response.setProductId(inventory.getProductId());
+        response.setProductName(inventory.getProductName());
+        response.setQuantity(inventory.getQuantity());
+        response.setMinStockLevel(inventory.getMinStockLevel());
+        response.setMaxStockLevel(inventory.getMaxStockLevel());
+        response.setLocation(inventory.getLocation());
+        response.setDescription(inventory.getDescription());
+        response.setCreatedAt(inventory.getCreatedAt());
+        response.setUpdatedAt(inventory.getUpdatedAt());
+        return response;
     }
 }
