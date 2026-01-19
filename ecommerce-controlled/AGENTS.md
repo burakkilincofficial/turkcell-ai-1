@@ -118,3 +118,25 @@ Each service MUST follow this layering:
   2. Why standard Spring/Java is insufficient?
 
   3. Alternatives + trade-offs
+
+## 5) CODING STANDARDS (QUALITY BAR)
+
+### 5.1) Simplicity
+
+- Prefer the simplest working solution.
+
+- Avoid over-engineering, unnecessary patterns, extra layers.
+
+### 5.2) Money & Time
+
+- Money uses `BigDecimal`, never `double/float`
+
+- Time uses `Instant` or `OffsetDateTime`
+
+- Do not mix time types without reason.
+
+### 5.3) IDs
+
+- Use a single ID strategy across all services. (UUID)
+
+- Never mix UUID and Long unless explicitly required by contract.

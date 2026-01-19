@@ -1,0 +1,6 @@
+com\ecommerce\order\application\usecase\GetAllOrdersUseCaseTest.class
+com\ecommerce\order\domain\model\OrderItemTest.class
+com\ecommerce\order\application\usecase\UpdateOrderStatusUseCaseTest.class
+com\ecommerce\order\application\usecase\CreateOrderUseCaseTest.class
+com\ecommerce\order\domain\model\OrderTest.class
+com\ecommerce\order\infrastructure\persistence\OrderRepositoryImplTest.class
