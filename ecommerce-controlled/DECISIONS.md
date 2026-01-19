@@ -1,5 +1,5 @@
 ## DECISIONS.md - (ADR - Architecture Decision Record)
-Last updated: 2026-01-19
+Last updated: 2026-01-19T10:00
 
 This document contains HUMAN-APPROVED technical decisions.
 AI assistants MUST follow these decisions and MUST NOT ask unless information is missing.

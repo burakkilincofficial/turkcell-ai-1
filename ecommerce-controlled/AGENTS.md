@@ -140,3 +140,7 @@ Each service MUST follow this layering:
 - Use a single ID strategy across all services. (UUID)
 
 - Never mix UUID and Long unless explicitly required by contract.
+
+## 6) Gateway Rules (Repo-Wide)
+
+- Gateway contains NO business logic; only routing + cross-cutting concerns.
