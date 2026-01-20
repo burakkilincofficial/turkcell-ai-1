@@ -1,6 +1,7 @@
 package com.ecommerce.order.application.usecase;
 
 import com.ecommerce.order.application.port.StockCheckPort;
+import com.ecommerce.order.application.service.OutboxService;
 import com.ecommerce.order.domain.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,14 @@ class CreateOrderUseCaseTest {
     @Mock
     private StockCheckPort stockCheckPort;
 
+    @Mock
+    private OutboxService outboxService;
+
     private CreateOrderUseCase createOrderUseCase;
 
     @BeforeEach
     void setUp() {
-        createOrderUseCase = new CreateOrderUseCase(orderRepository, stockCheckPort);
+        createOrderUseCase = new CreateOrderUseCase(orderRepository, stockCheckPort, outboxService);
     }
 
     @Test

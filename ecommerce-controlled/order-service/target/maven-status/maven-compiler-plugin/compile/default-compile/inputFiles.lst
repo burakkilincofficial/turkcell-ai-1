@@ -8,8 +8,10 @@ C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\or
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OrderItemEntity.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\JpaOrderRepository.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\OrderStatusUpdateRequest.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OutboxRepository.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\model\Address.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OrderEntity.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\messaging\OutboxPublisher.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OrderRepositoryImpl.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\UpdateOrderStatusUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\OrderRequest.java
@@ -22,6 +24,7 @@ C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\or
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\PageResponse.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\port\StockCheckPort.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\GetAllOrdersUseCase.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\service\OutboxService.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\exception\ProductNotFoundException.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\OrderItemResponse.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\CancelOrderRequest.java
@@ -29,12 +32,15 @@ C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\or
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\GetOrderByIdUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\GetOrdersByCustomerIdUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\repository\OrderRepository.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\config\KafkaProducerConfig.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\model\LineItem.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\client\InventoryServiceClientConfig.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\adapter\StockCheckAdapter.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\DeleteOrderUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\client\InventoryServiceClient.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\event\OrderCreatedEvent.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\OrderItemRequest.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\model\OrderStatus.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\config\OpenApiConfig.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\CancelOrderUseCase.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OutboxEntity.java

@@ -18,7 +18,7 @@
   "customerId": "uuid",
   "lineItems": [
     {
-      "productId": "uuid",
+      "productId": "string",
       "quantity": "integer (positive)"
     }
   ]

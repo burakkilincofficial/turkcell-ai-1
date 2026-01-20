@@ -16,7 +16,7 @@ public class OrderItemEntity {
     @Column(nullable = false)
     private String productId;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String productName;
 
     @Column(nullable = false)

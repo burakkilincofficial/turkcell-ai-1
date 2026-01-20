@@ -63,18 +63,19 @@ public class DecrementStockUseCase {
         
         // Step 2: Perform business logic (stock decrement)
         for (OrderCreatedEvent.LineItem lineItem : event.getLineItems()) {
-            Inventory inventory = inventoryRepository.findByProductId(lineItem.getProductId())
+            String productId = lineItem.getProductId().toString();
+            Inventory inventory = inventoryRepository.findByProductId(productId)
                 .orElseThrow(() -> new InventoryNotFoundException(
-                    "Product not found: " + lineItem.getProductId()));
+                    "Product not found: " + productId));
             
             // Decrement stock
-            inventory.decreaseQuantity(lineItem.getQuantity());
+            inventory.updateStock(-lineItem.getQuantity());
             
             // Persist changes
             inventoryRepository.save(inventory);
             
             log.info("Stock decremented: productId={}, quantity={}, remainingStock={}", 
-                lineItem.getProductId(), lineItem.getQuantity(), inventory.getQuantity());
+                productId, lineItem.getQuantity(), inventory.getQuantity());
         }
     }
 }
