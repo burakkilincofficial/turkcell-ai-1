@@ -2,19 +2,18 @@ package com.ecommerce.order.domain.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * LineItem value object.
  * Represents a single product entry within an order.
  * 
  * Business Rules (docs/rules/order-service-rules.md):
- * - productId: required, valid UUID
+ * - productId: required, non-blank string
  * - quantity: min 1, max 999
  * - unitPrice: min 0.01, scale 2
  */
 public record LineItem(
-    UUID productId,
+    String productId,
     Integer quantity,
     BigDecimal unitPrice
 ) {
@@ -23,6 +22,9 @@ public record LineItem(
      */
     public LineItem {
         Objects.requireNonNull(productId, "productId must not be null");
+        if (productId.isBlank()) {
+            throw new IllegalArgumentException("productId must not be blank");
+        }
         Objects.requireNonNull(quantity, "quantity must not be null");
         Objects.requireNonNull(unitPrice, "unitPrice must not be null");
         

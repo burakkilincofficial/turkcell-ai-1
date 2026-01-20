@@ -9,8 +9,6 @@ import com.ecommerce.order.infrastructure.client.dto.InventoryCheckResponse;
 import feign.FeignException;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 /**
  * Adapter implementing StockCheckPort using InventoryServiceClient.
  * Infrastructure layer - handles HTTP communication with inventory-service.
@@ -30,15 +28,15 @@ public class StockCheckAdapter implements StockCheckPort {
     }
 
     @Override
-    public void validateStockAvailability(UUID productId, int requestedQuantity) {
+    public void validateStockAvailability(String productId, int requestedQuantity) {
         try {
             InventoryCheckResponse inventory = inventoryServiceClient
-                .getInventoryByProductId(productId.toString());
+                .getInventoryByProductId(productId);
             
             // Q4: Check if inventory.quantity >= lineItem.quantity
             if (inventory.quantity() < requestedQuantity) {
                 throw new InsufficientStockException(
-                    productId.toString(),
+                    productId,
                     requestedQuantity,
                     inventory.quantity()
                 );
@@ -46,7 +44,7 @@ public class StockCheckAdapter implements StockCheckPort {
             
         } catch (FeignException.NotFound e) {
             // Q2: 404 = treat as error (product misconfigured)
-            throw new ProductNotFoundException(productId.toString());
+            throw new ProductNotFoundException(productId);
             
         } catch (FeignException.ServiceUnavailable | FeignException.InternalServerError e) {
             // Q1: 5xx errors after retries → 503

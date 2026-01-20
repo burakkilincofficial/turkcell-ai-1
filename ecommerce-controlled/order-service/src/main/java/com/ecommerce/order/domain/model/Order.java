@@ -96,7 +96,7 @@ public class Order {
         }
         
         // Check for duplicate productIds
-        Set<UUID> productIds = new HashSet<>();
+        Set<String> productIds = new HashSet<>();
         for (LineItem item : lineItems) {
             if (!productIds.add(item.productId())) {
                 throw new IllegalArgumentException(

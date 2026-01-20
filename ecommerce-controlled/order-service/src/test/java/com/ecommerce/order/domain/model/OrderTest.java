@@ -16,7 +16,7 @@ class OrderTest {
     void testOrderCreation() {
         UUID customerId = UUID.randomUUID();
         Address shippingAddress = new Address("123 Main St", "Springfield", "12345", "US");
-        LineItem lineItem = new LineItem(UUID.randomUUID(), 2, BigDecimal.valueOf(50.00));
+        LineItem lineItem = new LineItem("PROD-001", 2, BigDecimal.valueOf(50.00));
         List<LineItem> lineItems = List.of(lineItem);
         BigDecimal totalAmount = BigDecimal.valueOf(100.00);
 
@@ -37,7 +37,7 @@ class OrderTest {
     void testOrderStatusTransition() {
         UUID customerId = UUID.randomUUID();
         Address shippingAddress = new Address("123 Main St", "Springfield", "12345", "US");
-        LineItem lineItem = new LineItem(UUID.randomUUID(), 2, BigDecimal.valueOf(50.00));
+        LineItem lineItem = new LineItem("PROD-002", 2, BigDecimal.valueOf(50.00));
         List<LineItem> lineItems = List.of(lineItem);
         BigDecimal totalAmount = BigDecimal.valueOf(100.00);
 

@@ -245,7 +245,7 @@ public class OrderController {
     private OrderItemResponse toOrderItemResponse(LineItem lineItem) {
         return new OrderItemResponse(
                 null, // LineItem doesn't have ID in domain
-                lineItem.productId().toString(),
+                lineItem.productId(),
                 null, // productName not in LineItem
                 lineItem.quantity(),
                 lineItem.unitPrice(),
@@ -282,7 +282,7 @@ public class OrderController {
      */
     private LineItem toLineItem(OrderItemRequest itemRequest) {
         return new LineItem(
-                UUID.fromString(itemRequest.productId()),
+                itemRequest.productId(),
                 itemRequest.quantity(),
                 itemRequest.unitPrice()
         );

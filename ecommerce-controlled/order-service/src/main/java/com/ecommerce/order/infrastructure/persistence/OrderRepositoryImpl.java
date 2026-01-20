@@ -117,7 +117,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private OrderItemEntity toItemEntity(LineItem item) {
         OrderItemEntity entity = new OrderItemEntity();
-        entity.setProductId(item.productId().toString());
+        entity.setProductId(item.productId());
         entity.setQuantity(item.quantity());
         entity.setUnitPrice(item.unitPrice());
         entity.setTotalPrice(item.calculateSubtotal());
@@ -126,7 +126,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     private LineItem toItemDomain(OrderItemEntity entity) {
         return new LineItem(
-            UUID.fromString(entity.getProductId()),
+            entity.getProductId(),
             entity.getQuantity(),
             entity.getUnitPrice()
         );

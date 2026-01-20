@@ -1,7 +1,5 @@
 package com.ecommerce.order.application.port;
 
-import java.util.UUID;
-
 /**
  * Port interface for checking stock availability.
  * Implements dependency inversion principle - application layer defines contract,
@@ -20,5 +18,5 @@ public interface StockCheckPort {
      * @throws com.ecommerce.order.exception.ProductNotFoundException if product not found in inventory
      * @throws com.ecommerce.order.exception.InventoryServiceUnavailableException if service unavailable after retries
      */
-    void validateStockAvailability(UUID productId, int requestedQuantity);
+    void validateStockAvailability(String productId, int requestedQuantity);
 }
