@@ -31,3 +31,18 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     operationsSorter: method
+
+# External Service Configuration
+inventory-service:
+  url: http://localhost:8081
+
+# Feign Client Configuration
+feign:
+  client:
+    config:
+      inventory-service:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: basic
+  circuitbreaker:
+    enabled: false

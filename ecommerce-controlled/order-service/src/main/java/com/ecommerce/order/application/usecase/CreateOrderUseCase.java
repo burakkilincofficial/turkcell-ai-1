@@ -16,6 +16,7 @@ import java.util.UUID;
  * Business Rules: docs/rules/order-service-rules.md#3.1
  * 
  * Responsibilities:
+ * - Validate stock availability (SYNC call to inventory-service)
  * - Validate request data (delegated to domain model)
  * - Create order with PENDING status
  * - Persist order
@@ -25,9 +26,14 @@ import java.util.UUID;
 public class CreateOrderUseCase {
 
     private final OrderRepository orderRepository;
+    private final com.ecommerce.order.application.port.StockCheckPort stockCheckPort;
 
-    public CreateOrderUseCase(OrderRepository orderRepository) {
+    public CreateOrderUseCase(
+            OrderRepository orderRepository,
+            com.ecommerce.order.application.port.StockCheckPort stockCheckPort
+    ) {
         this.orderRepository = orderRepository;
+        this.stockCheckPort = stockCheckPort;
     }
 
     /**
@@ -47,8 +53,14 @@ public class CreateOrderUseCase {
         List<LineItem> lineItems,
         BigDecimal totalAmount
     ) {
-        // Sync iletişim ile, inventory-serviceden sipariş verilmesi talep edilen ürünlerin stok kontrolü
-        // yapılmalı.
+        // SYNC stock validation (blocking call to inventory-service)
+        // Per AGENTS.md §7.1: Blocking calls MUST be SYNC (Feign)
+        for (LineItem lineItem : lineItems) {
+            stockCheckPort.validateStockAvailability(
+                lineItem.productId(),
+                lineItem.quantity()
+            );
+        }
         
         // Domain model enforces all business rules
         Order order = Order.create(

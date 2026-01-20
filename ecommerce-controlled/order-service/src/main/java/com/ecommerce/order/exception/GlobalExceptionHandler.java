@@ -26,6 +26,48 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientStockException(
+            InsufficientStockException ex,
+            WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(
+            ProductNotFoundException ex,
+            WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(InventoryServiceUnavailableException.class)
+    public ResponseEntity<ErrorResponse> handleInventoryServiceUnavailableException(
+            InventoryServiceUnavailableException ex,
+            WebRequest request) {
+        ErrorResponse error = new ErrorResponse(
+                Instant.now(),
+                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase(),
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex,
