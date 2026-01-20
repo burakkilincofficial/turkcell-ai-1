@@ -7,6 +7,7 @@ C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\or
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OrderItemEntity.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\JpaOrderRepository.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\OrderStatusUpdateRequest.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\model\Address.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OrderEntity.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\infrastructure\persistence\OrderRepositoryImpl.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\UpdateOrderStatusUseCase.java
@@ -23,6 +24,7 @@ C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\or
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\GetOrderByIdUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\GetOrdersByCustomerIdUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\repository\OrderRepository.java
+C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\model\LineItem.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\application\usecase\DeleteOrderUseCase.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\dto\OrderItemRequest.java
 C:\Users\PC1\Desktop\Projects\Education\Java\turkcell-ai\ecommerce-controlled\order-service\src\main\java\com\ecommerce\order\domain\model\OrderStatus.java

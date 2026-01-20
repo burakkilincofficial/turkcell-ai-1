@@ -1,4 +1,5 @@
 com\ecommerce\order\application\usecase\DeleteOrderUseCase.class
+com\ecommerce\order\domain\model\Address.class
 com\ecommerce\order\domain\model\OrderStatus.class
 com\ecommerce\order\application\usecase\UpdateOrderStatusUseCase.class
 com\ecommerce\order\dto\CancelOrderRequest.class
@@ -6,10 +7,12 @@ com\ecommerce\order\application\usecase\UpdateOrderUseCase.class
 com\ecommerce\order\domain\repository\OrderRepository.class
 com\ecommerce\order\exception\OrderNotFoundException.class
 com\ecommerce\order\dto\OrderItemResponse.class
+com\ecommerce\order\domain\model\LineItem.class
 com\ecommerce\order\application\usecase\GetOrdersByCustomerIdUseCase.class
 com\ecommerce\order\domain\model\Order.class
 com\ecommerce\order\controller\OrderController.class
 com\ecommerce\order\dto\OrderStatusUpdateRequest.class
+com\ecommerce\order\domain\model\Order$1.class
 com\ecommerce\order\application\usecase\GetAllOrdersUseCase.class
 com\ecommerce\order\infrastructure\persistence\OrderRepositoryImpl.class
 com\ecommerce\order\dto\OrderItemRequest.class

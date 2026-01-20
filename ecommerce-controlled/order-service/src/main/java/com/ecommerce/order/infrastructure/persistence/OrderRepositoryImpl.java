@@ -1,12 +1,16 @@
 package com.ecommerce.order.infrastructure.persistence;
 
+import com.ecommerce.order.domain.model.Address;
+import com.ecommerce.order.domain.model.LineItem;
 import com.ecommerce.order.domain.model.Order;
-import com.ecommerce.order.domain.model.OrderItem;
+import com.ecommerce.order.domain.model.OrderStatus;
 import com.ecommerce.order.domain.repository.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,8 +42,20 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Page<Order> findByCustomerId(String customerId, Pageable pageable) {
-        return jpaOrderRepository.findByCustomerId(customerId, pageable).map(this::toDomain);
+    public Page<Order> findByCustomerId(UUID customerId, Pageable pageable) {
+        return jpaOrderRepository.findByCustomerId(customerId.toString(), pageable).map(this::toDomain);
+    }
+
+    @Override
+    public Page<Order> findByStatus(OrderStatus status, Pageable pageable) {
+        // TODO: Add method to JpaOrderRepository when needed
+        throw new UnsupportedOperationException("findByStatus not yet implemented");
+    }
+
+    @Override
+    public Page<Order> findByCreatedAtBetween(Instant startDate, Instant endDate, Pageable pageable) {
+        // TODO: Add method to JpaOrderRepository when needed
+        throw new UnsupportedOperationException("findByCreatedAtBetween not yet implemented");
     }
 
     @Override
@@ -51,81 +67,68 @@ public class OrderRepositoryImpl implements OrderRepository {
         OrderEntity entity = new OrderEntity();
         entity.setId(order.getId());
         entity.setOrderNumber(order.getOrderNumber());
-        entity.setCustomerId(order.getCustomerId());
-        entity.setCustomerName(order.getCustomerName());
-        entity.setCustomerEmail(order.getCustomerEmail());
-        entity.setShippingStreet(order.getShippingStreet());
-        entity.setShippingCity(order.getShippingCity());
-        entity.setShippingPostalCode(order.getShippingPostalCode());
-        entity.setShippingCountry(order.getShippingCountry());
-        entity.setBillingStreet(order.getBillingStreet());
-        entity.setBillingCity(order.getBillingCity());
-        entity.setBillingPostalCode(order.getBillingPostalCode());
-        entity.setBillingCountry(order.getBillingCountry());
+        entity.setCustomerId(order.getCustomerId().toString());
+        
+        // Map shippingAddress
+        Address shippingAddress = order.getShippingAddress();
+        entity.setShippingStreet(shippingAddress.street());
+        entity.setShippingCity(shippingAddress.city());
+        entity.setShippingPostalCode(shippingAddress.postalCode());
+        entity.setShippingCountry(shippingAddress.country());
+        
         entity.setTotalAmount(order.getTotalAmount());
         entity.setStatus(order.getStatus());
-        entity.setNotes(order.getNotes());
         entity.setCreatedAt(order.getCreatedAt());
         entity.setUpdatedAt(order.getUpdatedAt());
 
-        if (order.getItems() != null) {
-            entity.setItems(order.getItems().stream()
-                    .map(this::toItemEntity)
-                    .collect(Collectors.toList()));
-        }
+        // Map lineItems
+        List<OrderItemEntity> itemEntities = order.getLineItems().stream()
+                .map(this::toItemEntity)
+                .collect(Collectors.toList());
+        entity.setItems(itemEntities);
 
         return entity;
     }
 
     private Order toDomain(OrderEntity entity) {
-        Order order = new Order();
-        order.setId(entity.getId());
-        order.setOrderNumber(entity.getOrderNumber());
-        order.setCustomerId(entity.getCustomerId());
-        order.setCustomerName(entity.getCustomerName());
-        order.setCustomerEmail(entity.getCustomerEmail());
-        order.setShippingStreet(entity.getShippingStreet());
-        order.setShippingCity(entity.getShippingCity());
-        order.setShippingPostalCode(entity.getShippingPostalCode());
-        order.setShippingCountry(entity.getShippingCountry());
-        order.setBillingStreet(entity.getBillingStreet());
-        order.setBillingCity(entity.getBillingCity());
-        order.setBillingPostalCode(entity.getBillingPostalCode());
-        order.setBillingCountry(entity.getBillingCountry());
-        order.setTotalAmount(entity.getTotalAmount());
-        order.setStatus(entity.getStatus());
-        order.setNotes(entity.getNotes());
-        order.setCreatedAt(entity.getCreatedAt());
-        order.setUpdatedAt(entity.getUpdatedAt());
+        // Create Address from entity fields
+        Address shippingAddress = new Address(
+            entity.getShippingStreet(),
+            entity.getShippingCity(),
+            entity.getShippingPostalCode(),
+            entity.getShippingCountry()
+        );
 
-        if (entity.getItems() != null) {
-            order.setItems(entity.getItems().stream()
-                    .map(this::toItemDomain)
-                    .collect(Collectors.toList()));
-        }
+        // Create LineItems from entity items
+        List<LineItem> lineItems = entity.getItems().stream()
+                .map(this::toItemDomain)
+                .collect(Collectors.toList());
+
+        // Use factory method to create Order
+        Order order = Order.create(
+            UUID.fromString(entity.getCustomerId()),
+            shippingAddress,
+            lineItems,
+            entity.getTotalAmount()
+        );
 
         return order;
     }
 
-    private OrderItemEntity toItemEntity(OrderItem item) {
+    private OrderItemEntity toItemEntity(LineItem item) {
         OrderItemEntity entity = new OrderItemEntity();
-        entity.setId(item.getId());
-        entity.setProductId(item.getProductId());
-        entity.setProductName(item.getProductName());
-        entity.setQuantity(item.getQuantity());
-        entity.setUnitPrice(item.getUnitPrice());
-        entity.setTotalPrice(item.getTotalPrice());
+        entity.setProductId(item.productId().toString());
+        entity.setQuantity(item.quantity());
+        entity.setUnitPrice(item.unitPrice());
+        entity.setTotalPrice(item.calculateSubtotal());
         return entity;
     }
 
-    private OrderItem toItemDomain(OrderItemEntity entity) {
-        OrderItem item = new OrderItem();
-        item.setId(entity.getId());
-        item.setProductId(entity.getProductId());
-        item.setProductName(entity.getProductName());
-        item.setQuantity(entity.getQuantity());
-        item.setUnitPrice(entity.getUnitPrice());
-        item.setTotalPrice(entity.getTotalPrice());
-        return item;
+    private LineItem toItemDomain(OrderItemEntity entity) {
+        return new LineItem(
+            UUID.fromString(entity.getProductId()),
+            entity.getQuantity(),
+            entity.getUnitPrice()
+        );
     }
 }

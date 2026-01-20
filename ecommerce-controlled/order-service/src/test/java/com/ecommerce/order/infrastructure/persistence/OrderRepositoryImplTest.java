@@ -1,7 +1,8 @@
 package com.ecommerce.order.infrastructure.persistence;
 
+import com.ecommerce.order.domain.model.Address;
+import com.ecommerce.order.domain.model.LineItem;
 import com.ecommerce.order.domain.model.Order;
-import com.ecommerce.order.domain.model.OrderItem;
 import com.ecommerce.order.domain.model.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,25 +77,24 @@ class OrderRepositoryImplTest {
     }
 
     private Order createTestOrder() {
-        Order order = new Order();
-        order.setId(UUID.randomUUID());
-        order.setOrderNumber("ORD-2026-001");
-        order.setCustomerId("CUST-001");
-        order.setCustomerName("Test User");
-        order.setStatus(OrderStatus.PENDING);
-        order.setTotalAmount(BigDecimal.valueOf(100.00));
-        order.setCreatedAt(Instant.now());
-        order.setUpdatedAt(Instant.now());
-        order.setItems(new ArrayList<>());
-        return order;
+        UUID customerId = UUID.randomUUID();
+        Address shippingAddress = new Address("123 Main St", "Springfield", "12345", "US");
+        LineItem lineItem = new LineItem(UUID.randomUUID(), 2, BigDecimal.valueOf(50.00));
+        List<LineItem> lineItems = List.of(lineItem);
+        BigDecimal totalAmount = BigDecimal.valueOf(100.00);
+        
+        return Order.create(customerId, shippingAddress, lineItems, totalAmount);
     }
 
     private OrderEntity createTestEntity() {
         OrderEntity entity = new OrderEntity();
         entity.setId(UUID.randomUUID());
         entity.setOrderNumber("ORD-2026-001");
-        entity.setCustomerId("CUST-001");
-        entity.setCustomerName("Test User");
+        entity.setCustomerId(UUID.randomUUID().toString());
+        entity.setShippingStreet("123 Main St");
+        entity.setShippingCity("Springfield");
+        entity.setShippingPostalCode("12345");
+        entity.setShippingCountry("US");
         entity.setStatus(OrderStatus.PENDING);
         entity.setTotalAmount(BigDecimal.valueOf(100.00));
         entity.setCreatedAt(Instant.now());
